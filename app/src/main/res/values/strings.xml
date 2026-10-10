@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Fully Boot Launcher</string>
+    <string name="channel_name">Fully startup helper</string>
+    <string name="channel_description">Starts Fully Kiosk Browser after Android boots</string>
+    <string name="notification_title">Fully Boot Launcher</string>
+    <string name="notification_text">Starting Fully Kiosk Browser…</string>
+</resources>
