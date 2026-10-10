@@ -8,38 +8,45 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - name: Set up Java 17
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: '11'
+          java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK
+      - name: Install Android SDK 30
         run: |
-          sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "platform-tools" \
+            "platforms;android-30" \
+            "build-tools;30.0.3"
 
       - name: Set up Gradle 7.5
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: '7.5'
 
+      - name: Show versions
+        run: |
+          java -version
+          gradle --version
+
       - name: Build APK
-        run: gradle assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon --stacktrace
 
       - name: Rename APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk Fully-Boot-Launcher.apk
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk Fully-Boot-Launcher.apk
+          ls -lh Fully-Boot-Launcher.apk
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Fully-Boot-Launcher
           path: Fully-Boot-Launcher.apk
