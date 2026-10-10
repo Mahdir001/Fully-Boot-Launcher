@@ -1,0 +1,26 @@
+Fully Boot Launcher V3 - Android TV 11 / CVTE
+
+1) Build APK in GitHub Actions as before.
+2) Install:
+   adb install -r Fully-Boot-Launcher.apk
+
+3) Grant overlay/background allowances:
+   adb shell appops set com.fully.bootlauncher SYSTEM_ALERT_WINDOW allow
+   adb shell cmd deviceidle whitelist +com.fully.bootlauncher
+   adb shell am set-inactive com.fully.bootlauncher false
+   adb shell appops set com.fully.bootlauncher RUN_IN_BACKGROUND allow
+   adb shell appops set com.fully.bootlauncher RUN_ANY_IN_BACKGROUND allow
+
+4) Launch helper ONCE after install to clear Android's stopped state:
+   adb shell am start -n com.fully.bootlauncher/.MainActivity
+
+5) Keep it as HOME too:
+   adb shell cmd package set-home-activity com.fully.bootlauncher/.MainActivity
+
+6) IMPORTANT: do NOT use force-stop before reboot.
+
+7) Reboot:
+   adb reboot
+
+8) If it still does not start Fully, collect:
+   adb shell logcat -d | findstr /i "FullyBootLauncher Background ActivityTaskManager"
